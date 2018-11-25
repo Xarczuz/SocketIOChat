@@ -36,7 +36,9 @@ io.on('connection', function (socket) {
       io.emit('chat message', socket.username + ' connected');
       console.log(socket.username + ' connected');
     }
+    
   });
+
   socket.on('sendPing', function (userName) {
     let d = new Date();
     console.log(d + userName + ' pinged');
@@ -70,6 +72,7 @@ io.on('connection', function (socket) {
 http.listen(process.env.PORT, function () {
   console.log('listening on *: '+ process.env.PORT);
 });
+
 
 function sendUserList(userList) {
   io.emit('userList', userList);
