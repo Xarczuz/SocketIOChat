@@ -67,8 +67,8 @@ io.on('connection', function (socket) {
   });
 });
 
-http.listen(8000, function () {
-  console.log('listening on *:8000');
+http.listen(process.env.PORT, function () {
+  console.log('listening on *: '+ process.env.PORT);
 });
 
 function sendUserList(userList) {
