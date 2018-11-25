@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket.IO chat</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+    <div id="chat">
+        <ul id="messages">
+        </ul>
+        <ul id="feedBack"></ul>
+    </div>
+    <form id="form" action="">
+        <input id="m" autocomplete="off" autofocus="true" /><button>Send</button>
+    </form>
+    <div id="userList">
+        <h2>Users</h2>
+        <ul id="users"></ul>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script >$(document).ready(function () {
+            let userName = prompt('Username', 'AnonymousX');
+            if (userName == null || userName == '') { alert('User canceled'); } else {
+              connect(userName);
+            }
+          });
+          
+          function connect(userName) {
+            const socket = io('http://localhost:3000');
+            let message = $('#m');
+            socket.emit('change_username', {
+              username: userName
+            });
+          
+            setInterval(function () {
+              socket.emit('sendPing', userName);
+            }, 5000);
+          
+            message.bind('keypress', function () {
+              socket.emit('typing');
+            });
+            socket.on('typing', function (data) {
+              $('#feedBack').html($('<li>').text(data.username + ' is typing'));
+              $('#chat').scrollTop($('#messages').height());
+            });
+            socket.on('done typing', function (data) {
+              $('#feedBack').html($('<li>').text());
+            });
+            $('form').submit(function () {
+              socket.emit('done typing');
+              socket.emit('chat message', $('#m').val());
+              $('#m').val('');
+              return false;
+            });
+            socket.on('chat message', function (msg) {
+              $('#messages').append($('<li>').text(msg));
+          
+              $('#chat').scrollTop($('#messages').height());
+          
+            });
+          
+            socket.on('userList', function (user) {
+              $('#users').html('');
+              for (let i = 0; i < user.users.length; i++) {
+                $('#users').append($('<li>').text(user.users[i]));
+              }
+            });
+          }</script>
+</body>
+
+</html>
