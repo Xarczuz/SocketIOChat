@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Socket.IO chat</title>
-
     <link rel="stylesheet" href="/css/style.css">
 
 </head>
@@ -35,7 +34,7 @@
           });
           
           function connect(userName) {
-            const socket = io('http://localhost:3000');
+            const socket = io('');
             let message = $('#m');
             socket.emit('change_username', {
               username: userName
