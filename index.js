@@ -9,13 +9,12 @@ const io = require('socket.io')(http);
 //   pingInterval: 3000,
 //   pingTimeout: 10000,
 //   cookie: false
-
 // });
+
 process.on('uncaughtException', function (err) {
   console.error('uncaughtException', err.stack);
 
 });
-
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -68,8 +67,8 @@ io.on('connection', function (socket) {
   });
 });
 
-http.listen(3000, function () {
-  console.log('listening on *:3000');
+http.listen(8000, function () {
+  console.log('listening on *:8000');
 });
 
 function sendUserList(userList) {
